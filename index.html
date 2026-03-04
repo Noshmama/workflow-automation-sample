@@ -1,0 +1,1663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shipment Tracking & Notification System — Global Promo</title>
+    <style>
+        :root {
+            --primary: #1a3a5c;
+            --primary-light: #2c5f8a;
+            --accent: #e8913a;
+            --bg: #ffffff;
+            --bg-alt: #f7f9fb;
+            --text: #2d3748;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+            --success: #22863a;
+            --warning: #d97706;
+            --danger: #dc2626;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Calibri, Arial, sans-serif;
+            color: var(--text);
+            line-height: 1.7;
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 40px 32px;
+            background: var(--bg);
+        }
+
+        /* --- Header --- */
+        .report-header {
+            border-bottom: 4px solid var(--primary);
+            padding-bottom: 24px;
+            margin-bottom: 40px;
+        }
+
+        .report-header h1 {
+            font-size: 28px;
+            color: var(--primary);
+            margin-bottom: 4px;
+            letter-spacing: -0.5px;
+        }
+
+        .report-header .subtitle {
+            font-size: 18px;
+            color: var(--primary-light);
+            font-weight: 400;
+            margin-bottom: 16px;
+        }
+
+        .report-header .meta {
+            font-size: 14px;
+            color: var(--text-light);
+        }
+
+        .report-header .meta span {
+            margin-right: 24px;
+        }
+
+        /* --- Table of Contents --- */
+        .toc {
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 24px 32px;
+            margin-bottom: 40px;
+        }
+
+        .toc h2 {
+            font-size: 16px;
+            color: var(--primary);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .toc ol {
+            columns: 2;
+            column-gap: 32px;
+            padding-left: 20px;
+        }
+
+        .toc li {
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+
+        .toc a {
+            color: var(--primary-light);
+            text-decoration: none;
+        }
+
+        .toc a:hover {
+            text-decoration: underline;
+        }
+
+        /* --- Sections --- */
+        section {
+            margin-bottom: 48px;
+        }
+
+        h2.section-title {
+            font-size: 22px;
+            color: var(--primary);
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 8px;
+            margin-bottom: 20px;
+        }
+
+        h2.section-title .section-num {
+            color: var(--accent);
+            margin-right: 8px;
+        }
+
+        h3 {
+            font-size: 17px;
+            color: var(--primary-light);
+            margin-top: 28px;
+            margin-bottom: 12px;
+        }
+
+        p, li {
+            font-size: 15px;
+            margin-bottom: 10px;
+        }
+
+        ul, ol {
+            padding-left: 24px;
+        }
+
+        strong {
+            color: var(--primary);
+        }
+
+        /* --- Tables --- */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0 24px;
+            font-size: 14px;
+        }
+
+        thead th {
+            background: var(--primary);
+            color: #fff;
+            padding: 10px 14px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        tbody td {
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+        }
+
+        tbody tr:nth-child(even) {
+            background: var(--bg-alt);
+        }
+
+        /* --- Diagrams --- */
+        .diagram-container {
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 32px 24px;
+            margin: 24px 0;
+            overflow-x: auto;
+        }
+
+        .diagram-container .diagram-title {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-light);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* Flow diagram styles */
+        .flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .flow-box {
+            background: #fff;
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            padding: 14px 18px;
+            text-align: center;
+            min-width: 150px;
+            max-width: 180px;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .flow-box.highlight {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+
+        .flow-box.accent {
+            border-color: var(--accent);
+            background: #fef6ee;
+        }
+
+        .flow-box .box-label {
+            font-weight: 700;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .flow-arrow {
+            font-size: 22px;
+            color: var(--primary);
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .flow-arrow-down {
+            font-size: 22px;
+            color: var(--primary);
+            font-weight: bold;
+            text-align: center;
+            width: 100%;
+            margin: 4px 0;
+        }
+
+        /* Architecture diagram */
+        .arch-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .arch-box {
+            background: #fff;
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .arch-box.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .arch-box .arch-label {
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .arch-box .arch-tool {
+            font-size: 13px;
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .arch-box .arch-desc {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+
+        .arch-connector {
+            text-align: center;
+            font-size: 20px;
+            color: var(--primary);
+            font-weight: bold;
+            grid-column: 1 / -1;
+            margin: -8px 0;
+        }
+
+        /* Data flow steps */
+        .data-flow-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+            max-width: 750px;
+            margin: 0 auto;
+        }
+
+        .step-box {
+            background: #fff;
+            border: 2px solid var(--primary-light);
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+            position: relative;
+        }
+
+        .step-box .step-num {
+            display: inline-block;
+            background: var(--primary);
+            color: #fff;
+            width: 26px;
+            height: 26px;
+            line-height: 26px;
+            border-radius: 50%;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .step-box .step-title {
+            font-weight: 700;
+            font-size: 13px;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .step-box .step-desc {
+            font-size: 12px;
+            color: var(--text-light);
+            line-height: 1.4;
+        }
+
+        .flow-row-connector {
+            grid-column: 1 / -1;
+            text-align: center;
+            font-size: 22px;
+            color: var(--primary);
+            margin: -4px 0;
+        }
+
+        /* --- Checklist --- */
+        .checklist {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .checklist li {
+            padding: 6px 0 6px 28px;
+            position: relative;
+            font-size: 14px;
+        }
+
+        .checklist li::before {
+            content: "\2610";
+            position: absolute;
+            left: 0;
+            font-size: 16px;
+            color: var(--primary-light);
+        }
+
+        /* --- Phase cards --- */
+        .phase-card {
+            border-left: 4px solid var(--primary);
+            background: var(--bg-alt);
+            border-radius: 0 8px 8px 0;
+            padding: 20px 24px;
+            margin-bottom: 24px;
+        }
+
+        .phase-card h3 {
+            margin-top: 0;
+            color: var(--primary);
+        }
+
+        .phase-card .phase-objective {
+            font-style: italic;
+            color: var(--text-light);
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+        .phase-card .phase-outcome {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 10px 14px;
+            margin-top: 12px;
+            font-size: 13px;
+        }
+
+        .phase-card .phase-outcome strong {
+            color: var(--success);
+        }
+
+        /* --- Timeline bar --- */
+        .timeline-bar {
+            display: flex;
+            margin: 24px 0;
+            border-radius: 8px;
+            overflow: hidden;
+            font-size: 12px;
+        }
+
+        .timeline-bar .tl-segment {
+            padding: 12px 8px;
+            text-align: center;
+            color: #fff;
+            font-weight: 600;
+            flex: 1;
+        }
+
+        .timeline-bar .tl-segment:nth-child(1) { background: #1a3a5c; }
+        .timeline-bar .tl-segment:nth-child(2) { background: #2c5f8a; }
+        .timeline-bar .tl-segment:nth-child(3) { background: #e8913a; }
+        .timeline-bar .tl-segment:nth-child(4) { background: #3a8a6e; }
+        .timeline-bar .tl-segment:nth-child(5) { background: #64748b; }
+
+        .timeline-bar .tl-segment .tl-weeks {
+            display: block;
+            font-weight: 400;
+            font-size: 11px;
+            opacity: 0.85;
+            margin-top: 2px;
+        }
+
+        /* --- Risk badges --- */
+        .risk-low {
+            display: inline-block;
+            background: #dcfce7;
+            color: #166534;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .risk-med {
+            display: inline-block;
+            background: #fef3c7;
+            color: #92400e;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* --- Conclusion --- */
+        .conclusion-box {
+            text-align: left;
+        }
+
+        .conclusion-box ul {
+            padding-left: 24px;
+        }
+
+        .conclusion-box li {
+            font-size: 15px;
+            margin-bottom: 10px;
+        }
+
+        .conclusion-box .closing {
+            margin-top: 16px;
+            font-size: 15px;
+        }
+
+        /* --- Glossary --- */
+        .glossary-grid {
+            display: grid;
+            gap: 0;
+        }
+
+        .glossary-item {
+            display: grid;
+            grid-template-columns: 180px 1fr;
+            border-bottom: 1px solid var(--border);
+            padding: 12px 0;
+        }
+
+        .glossary-item:last-child {
+            border-bottom: none;
+        }
+
+        .glossary-term {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 14px;
+        }
+
+        .glossary-def {
+            font-size: 14px;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* --- Footer --- */
+        .report-footer {
+            margin-top: 48px;
+            padding-top: 16px;
+            border-top: 2px solid var(--border);
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-light);
+        }
+
+        /* --- Print styles --- */
+        @media print {
+            body { padding: 20px; }
+            .diagram-container { break-inside: avoid; }
+            .phase-card { break-inside: avoid; }
+            table { break-inside: avoid; }
+            .conclusion-box { break-inside: avoid; }
+        }
+        /* --- Password Gate --- */
+        .password-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .password-box {
+            background: #fff;
+            border-radius: 12px;
+            padding: 40px 48px;
+            text-align: center;
+            max-width: 420px;
+            width: 90%;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+
+        .password-box h2 {
+            color: var(--primary);
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .password-box p {
+            color: var(--text-light);
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        .password-box input {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 15px;
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            outline: none;
+            margin-bottom: 16px;
+            font-family: inherit;
+        }
+
+        .password-box input:focus {
+            border-color: var(--primary-light);
+        }
+
+        .password-box button {
+            width: 100%;
+            padding: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .password-box button:hover {
+            background: var(--primary-light);
+        }
+
+        .password-box .error-msg {
+            color: var(--danger);
+            font-size: 13px;
+            margin-top: 12px;
+            display: none;
+        }
+
+        .report-content {
+            display: none;
+        }
+        /* Tooltip terms */
+        .tip {
+            position: relative;
+            border-bottom: 1.5px dotted #1a5276;
+            color: #1a5276;
+            cursor: help;
+            font-weight: 600;
+        }
+        .tip .tip-text {
+            visibility: hidden;
+            opacity: 0;
+            position: absolute;
+            bottom: 130%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1a252f;
+            color: #fff;
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 400;
+            line-height: 1.5;
+            width: 280px;
+            text-align: left;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+            transition: opacity 0.2s;
+        }
+        .tip .tip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -6px;
+            border-width: 6px;
+            border-style: solid;
+            border-color: #1a252f transparent transparent transparent;
+        }
+        .tip:hover .tip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== PASSWORD GATE ===== -->
+    <div class="password-overlay" id="passwordOverlay">
+        <div class="password-box">
+            <h2>Protected Document</h2>
+            <p>This report is confidential. Please enter the password to continue.</p>
+            <input type="password" id="passwordInput" placeholder="Enter password" autofocus>
+            <button onclick="checkPassword()">Access Report</button>
+            <div class="error-msg" id="errorMsg">Incorrect password. Please try again.</div>
+        </div>
+    </div>
+
+    <!-- ===== REPORT CONTENT (hidden until authenticated) ===== -->
+    <div class="report-content" id="reportContent">
+
+    <!-- ===== HEADER ===== -->
+    <header class="report-header">
+        <h1>Shipment Tracking & Notification System</h1>
+        <div class="subtitle">Process Improvement Proposal for Global Promo</div>
+        <div class="meta">
+            <span><strong>Prepared by:</strong> Zillah Bahar</span>
+            <span><strong>Date:</strong> March 2, 2026</span>
+            <span><strong>Version:</strong> 1.0</span>
+        </div>
+    </header>
+
+    <!-- ===== TABLE OF CONTENTS ===== -->
+    <nav class="toc">
+        <h2>Table of Contents</h2>
+        <ol>
+            <li><a href="#executive-summary">Executive Summary</a></li>
+            <li><a href="#current-state">Current State Analysis</a></li>
+            <li><a href="#architecture">System Architecture Overview</a></li>
+            <li><a href="#tech-stack">Recommended Tools & Tech Stack</a></li>
+            <li><a href="#data-flow">Data Flow Explanation</a></li>
+            <li><a href="#automation">Automation Logic</a></li>
+            <li><a href="#phases">Implementation Phases</a></li>
+            <li><a href="#timeline">Estimated Timeline</a></li>
+            <li><a href="#risks">Risks, Limitations & Assumptions</a></li>
+            <li><a href="#conclusion">Conclusion</a></li>
+            <li><a href="#glossary">Glossary of Key Terms</a></li>
+        </ol>
+    </nav>
+
+    <!-- ===== 1. EXECUTIVE SUMMARY ===== -->
+    <section id="executive-summary">
+        <h2 class="section-title"><span class="section-num">1.</span> Executive Summary</h2>
+        <p>Global Promo currently relies on manual processes to track shipments, update distributors, and monitor delivery status across U.S. and China-origin orders. This proposal outlines a system that integrates Zoho Books with a tracking aggregation platform and automated notification engine to:</p>
+        <ul>
+            <li>Eliminate the Excel tracking spreadsheet and automate tracking number capture for both U.S. shipments (via ShippingEasy integration) and China shipments (via barcode scanning)</li>
+            <li>Provide a centralized, real-time shipment dashboard</li>
+            <li>Automate distributor email notifications at key shipment milestones</li>
+            <li>Reduce manual tracking work by 80% across both U.S. and China shipments</li>
+        </ul>
+        <p>The recommended approach leverages Global Promo's existing Zoho One ecosystem, supplemented by AfterShip (a multi-carrier tracking aggregator), to minimize implementation complexity and team retraining. The entire system can be built using no-code configuration tools — no custom software development is required.</p>
+
+        <h3>Implementation Roles</h3>
+        <p>This proposal defines <em>what</em> should be built and <em>why</em>. The technical configuration — setting up Zoho Flow workflows, AfterShip rules, and dashboard views — should be carried out by the appropriate resource(s):</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Role</th>
+                    <th>Responsibility</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Marketing & System Specialist</strong></td>
+                    <td>System design, workflow architecture, process documentation, quality control, and ongoing optimization. Defines requirements and validates that the system works as intended.</td>
+                </tr>
+                <tr>
+                    <td><strong>Zoho support / certified consultant</strong></td>
+                    <td>Hands-on configuration of Zoho Flow automations, AfterShip integration, webhook setup, and email template buildout. Zoho provides phone and email technical support, an active community platform, and a network of certified partners if deeper assistance is needed.</td>
+                </tr>
+                <tr>
+                    <td><strong>India-based execution team</strong></td>
+                    <td>Currently assists with email campaigns. Can be expanded to support data entry tasks during migration, email template formatting, and QC verification under direction from the Specialist. May benefit from Zoho-specific training to increase their capacity.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>How the 80% Reduction Is Achieved</h3>
+        <p>The current workflow consists of five core manual tasks performed by CSRs for every shipment. The proposed system automates four of the five for both U.S. and China shipments — using ShippingEasy integration for U.S. orders and barcode scanning for China orders — leaving only exception handling as a manual task.</p>
+
+        <h4 style="color: var(--primary-light); margin-top: 20px; margin-bottom: 10px;">U.S. Shipments (via ShippingEasy / UPS / FedEx)</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>Task</th>
+                    <th>Current Process</th>
+                    <th>Proposed Process</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1. Enter tracking number</td>
+                    <td>CSR manually types tracking number into Excel</td>
+                    <td>Auto-captured from ShippingEasy into Zoho Books via Zoho Flow at label creation</td>
+                    <td><span class="risk-low">Automated</span></td>
+                </tr>
+                <tr>
+                    <td>2. Check tracking status</td>
+                    <td>CSR manually visits carrier websites to look up status</td>
+                    <td>AfterShip monitors UPS, FedEx, and DHL automatically</td>
+                    <td><span class="risk-low">Automated</span></td>
+                </tr>
+                <tr>
+                    <td>3. Send "shipped" email</td>
+                    <td>CSR manually drafts and sends email to distributor</td>
+                    <td>Triggered automatically when tracking number is registered</td>
+                    <td><span class="risk-low">Automated</span></td>
+                </tr>
+                <tr>
+                    <td>4. Send "delivered" email</td>
+                    <td>CSR manually drafts and sends email to distributor</td>
+                    <td>Triggered automatically when carrier confirms delivery</td>
+                    <td><span class="risk-low">Automated</span></td>
+                </tr>
+                <tr>
+                    <td>5. Handle exceptions</td>
+                    <td>CSR discovers issues manually during routine status checks</td>
+                    <td>System flags exceptions and alerts CSR — resolution still requires human judgment</td>
+                    <td><span class="risk-med">Remains manual</span></td>
+                </tr>
+            </tbody>
+        </table>
+        <p><strong>U.S. result: 4 of 5 tasks automated (80%).</strong> Full automation is achievable immediately by integrating ShippingEasy with Zoho Books. <em>Note: this percentage is based on task count, not measured time. Some tasks (e.g., checking carrier websites multiple times a day) consume more time than others. Actual time savings should be measured during Phase 5 to validate the impact.</em></p>
+
+        <h4 style="color: var(--primary-light); margin-top: 20px; margin-bottom: 10px;">China Shipments (via freight forwarder)</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>Task</th>
+                    <th>Current Process</th>
+                    <th>Proposed Process</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1. Enter tracking number</td>
+                    <td>Freight forwarder provides tracking number manually; CSR enters it into Excel</td>
+                    <td>China team scans the barcode on the freight forwarder's shipping label using a Zoho Creator mobile form. The tracking number is captured directly into Zoho Books — no manual typing required.</td>
+                    <td><span class="risk-low">Automated via barcode scan</span></td>
+                </tr>
+                <tr>
+                    <td>2. Check tracking status</td>
+                    <td>CSR manually visits carrier websites to look up status</td>
+                    <td>AfterShip monitors DHL and other carriers automatically once tracking is in the system</td>
+                    <td><span class="risk-low">Automated</span></td>
+                </tr>
+                <tr>
+                    <td>3. Send "shipped" email</td>
+                    <td>CSR manually drafts and sends email to distributor</td>
+                    <td>Triggered automatically when tracking number is entered into Zoho Books</td>
+                    <td><span class="risk-low">Automated</span></td>
+                </tr>
+                <tr>
+                    <td>4. Send "delivered" email</td>
+                    <td>CSR manually drafts and sends email to distributor</td>
+                    <td>Triggered automatically when carrier confirms delivery</td>
+                    <td><span class="risk-low">Automated</span></td>
+                </tr>
+                <tr>
+                    <td>5. Handle exceptions</td>
+                    <td>CSR discovers issues manually during routine status checks</td>
+                    <td>System flags exceptions and alerts CSR — resolution still requires human judgment</td>
+                    <td><span class="risk-med">Remains manual</span></td>
+                </tr>
+            </tbody>
+        </table>
+        <p><strong>China result: 4 of 5 tasks automated (80%).</strong> Barcode scanning eliminates manual tracking number typing — the primary source of data entry errors — without requiring the freight forwarder to change their process. The only remaining manual task is exception handling, which still requires human judgment.</p>
+
+        <h4 style="color: var(--primary-light); margin-top: 20px; margin-bottom: 10px;">Combined Impact</h4>
+        <p>Across both U.S. and China shipments, the 80% manual work reduction target is achievable. U.S. shipments are automated via ShippingEasy integration. China shipments are automated via barcode scanning of the freight forwarder's shipping labels. In both cases, 4 of 5 repetitive tasks are eliminated, leaving only exception handling — which is itself improved by proactive system alerts. <em>Note: these percentages are based on task count. Some tasks (e.g., checking carrier websites multiple times a day) consume more time than others. Actual time savings should be measured during Phase 5 to validate the impact.</em></p>
+    </section>
+
+    <!-- ===== 2. CURRENT STATE ANALYSIS ===== -->
+    <section id="current-state">
+        <h2 class="section-title"><span class="section-num">2.</span> Current State Analysis</h2>
+
+        <h3>Current Workflow</h3>
+        <div class="diagram-container">
+            <div class="diagram-title">Current Manual Process</div>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 0;">
+                <div class="flow-box" style="width: 340px; margin: 0;">
+                    <span class="box-label">Step 1</span>
+                    Order created in Zoho Books
+                </div>
+                <div style="font-size: 22px; color: #555; line-height: 1.2;">&#8595;</div>
+                <div class="flow-box" style="width: 340px; margin: 0;">
+                    <span class="box-label">Step 2</span>
+                    Order ships (China or U.S.)
+                </div>
+                <div style="font-size: 22px; color: #555; line-height: 1.2;">&#8595;</div>
+                <div class="flow-box accent" style="width: 340px; margin: 0;">
+                    <span class="box-label">Step 3 — Manual</span>
+                    CSR enters tracking into Excel
+                </div>
+                <div style="font-size: 22px; color: #555; line-height: 1.2;">&#8595;</div>
+                <div class="flow-box accent" style="width: 340px; margin: 0;">
+                    <span class="box-label">Step 4 — Manual</span>
+                    CSR checks carrier websites one by one
+                </div>
+                <div style="font-size: 22px; color: #555; line-height: 1.2;">&#8595;</div>
+                <div class="flow-box accent" style="width: 340px; margin: 0;">
+                    <span class="box-label">Step 5 — Manual</span>
+                    CSR emails distributor with updates
+                </div>
+            </div>
+        </div>
+
+        <h3>Pain Points Identified</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Pain Point</th>
+                    <th>Impact</th>
+                    <th>Frequency</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Manual tracking entry into Excel</td>
+                    <td>Data entry errors, duplication of effort</td>
+                    <td>Every shipment</td>
+                </tr>
+                <tr>
+                    <td>No centralized shipment view</td>
+                    <td>CSRs lack visibility; management cannot monitor at a glance</td>
+                    <td>Ongoing</td>
+                </tr>
+                <tr>
+                    <td>Manual carrier website checks</td>
+                    <td>Time-consuming; status updates are delayed</td>
+                    <td>Multiple times/day</td>
+                </tr>
+                <tr>
+                    <td>Manual distributor emails</td>
+                    <td>Inconsistent communication; missed notifications</td>
+                    <td>Every shipment milestone</td>
+                </tr>
+                <tr>
+                    <td>Dual-origin shipping (China + U.S.)</td>
+                    <td>Multiple carriers, multiple tracking formats</td>
+                    <td>Every shipment</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- ===== 3. SYSTEM ARCHITECTURE ===== -->
+    <section id="architecture">
+        <h2 class="section-title"><span class="section-num">3.</span> System Architecture Overview</h2>
+        <p>The proposed system consists of four integrated layers:</p>
+
+        <div class="diagram-container">
+            <div class="diagram-title">Proposed System Architecture</div>
+            <div class="arch-grid">
+                <div class="arch-box full-width">
+                    <div class="arch-label">Data Source Layer</div>
+                    <div class="arch-tool">Zoho Books</div>
+                    <div class="arch-desc">System of record for orders, invoices, and tracking numbers. Replaces Excel as the single entry point.</div>
+                </div>
+
+                <div class="arch-connector">&#8595; <span class="tip">API Sync<span class="tip-text">An automatic, ongoing connection between two systems. Here, Zoho Flow continuously watches Zoho Books and sends new data to AfterShip without anyone having to copy or paste anything.</span></span></div>
+
+                <div class="arch-box full-width">
+                    <div class="arch-label">Automation Layer</div>
+                    <div class="arch-tool">Zoho Flow</div>
+                    <div class="arch-desc">Monitors Zoho Books for new tracking numbers. Pushes data to AfterShip and orchestrates downstream actions.</div>
+                </div>
+
+                <div class="arch-connector">&#8595; <span class="tip">API Calls<span class="tip-text">A request sent from one system to another asking it to do something. Here, Zoho Flow sends a message to AfterShip saying "start tracking this shipment" — like placing an order at a counter.</span></span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &#8593; <span class="tip">Webhooks<span class="tip-text">An automatic notification sent from one system to another when something happens. Here, AfterShip sends a message back to Zoho Flow the moment a shipment status changes — like getting a text alert instead of having to keep checking.</span></span></div>
+
+                <div class="arch-box full-width">
+                    <div class="arch-label">Tracking Layer</div>
+                    <div class="arch-tool">AfterShip</div>
+                    <div class="arch-desc">Aggregates tracking data from 1,200+ carriers worldwide. Provides normalized status updates and webhook notifications.</div>
+                </div>
+
+                <div class="arch-connector">&#8595; <span class="tip">Triggers<span class="tip-text">A rule that says "when X happens, automatically do Y." Here, when AfterShip detects a shipment status change, it triggers an email to the distributor — no human involvement needed.</span></span></div>
+
+                <div class="arch-box">
+                    <div class="arch-label">Email Notifications</div>
+                    <div class="arch-tool">AfterShip + Zoho Flow</div>
+                    <div class="arch-desc">Automated distributor-facing emails at key milestones. Internal alerts for exceptions.</div>
+                </div>
+                <div class="arch-box">
+                    <div class="arch-label">Dashboard</div>
+                    <div class="arch-tool">AfterShip / Zoho Analytics</div>
+                    <div class="arch-desc">Centralized shipment visibility for CSRs, operations, and management.</div>
+                </div>
+            </div>
+        </div>
+
+        <h3>Layer Descriptions</h3>
+        <ol>
+            <li><strong>Data Source Layer (Zoho Books):</strong> The system of record for orders, invoices, and tracking numbers. For U.S. shipments, tracking numbers flow in automatically from ShippingEasy via Zoho Flow. For China shipments, the China team scans the barcode on the freight forwarder's shipping label using a Zoho Creator mobile form, which writes the tracking number directly to Zoho Books.</li>
+            <li><strong>Automation Layer (Zoho Flow):</strong> Monitors Zoho Books for new or updated tracking numbers. When detected, it pushes the tracking number and shipment details to AfterShip via API and orchestrates downstream actions.</li>
+            <li><strong>Tracking Layer (AfterShip):</strong> Aggregates tracking data from 1,200+ carriers worldwide (including all major U.S. and China carriers). Provides normalized status updates and sends webhook notifications on status changes.</li>
+            <li><strong>Notification & Dashboard Layer:</strong> Delivers automated distributor emails at key milestones and provides an internal dashboard for real-time shipment visibility.</li>
+        </ol>
+    </section>
+
+    <!-- ===== 4. TECH STACK ===== -->
+    <section id="tech-stack">
+        <h2 class="section-title"><span class="section-num">4.</span> Recommended Tools & Tech Stack</h2>
+
+        <h3>Core Stack</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Component</th>
+                    <th>Recommended Tool</th>
+                    <th>Purpose</th>
+                    <th>Why This Tool</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Order Management</td>
+                    <td><strong>Zoho Books</strong> (existing)</td>
+                    <td>Source of truth for orders & tracking numbers</td>
+                    <td>Already in use; no migration needed</td>
+                </tr>
+                <tr>
+                    <td>U.S. Shipping Platform</td>
+                    <td><strong>ShippingEasy</strong> (existing)</td>
+                    <td>U.S. label creation and tracking number generation</td>
+                    <td>Already in use for U.S. orders; supports API integration with Zoho Books via Zoho Flow, enabling automatic tracking number capture</td>
+                </tr>
+                <tr>
+                    <td>Automation Engine</td>
+                    <td><strong>Zoho Flow</strong></td>
+                    <td>Orchestrate data movement between systems</td>
+                    <td>Native Zoho integration; no-code/low-code; included in Zoho One</td>
+                </tr>
+                <tr>
+                    <td>Tracking Aggregator</td>
+                    <td><strong>AfterShip</strong></td>
+                    <td>Multi-carrier tracking, status normalization</td>
+                    <td>Supports 1,200+ carriers including Global Promo's carriers (UPS, FedEx, DHL); webhook support; branded tracking pages</td>
+                </tr>
+                <tr>
+                    <td>Dashboard</td>
+                    <td><strong>AfterShip Dashboard</strong> / <strong>Zoho Analytics</strong></td>
+                    <td>Centralized shipment visibility</td>
+                    <td>AfterShip provides a built-in shipment dashboard; Zoho Analytics can supplement with custom reports</td>
+                </tr>
+                <tr>
+                    <td>Email Notifications</td>
+                    <td><strong>AfterShip Notifications</strong> + <strong>Zoho Flow</strong></td>
+                    <td>Automated distributor-facing emails</td>
+                    <td>AfterShip handles delivery-event emails; Zoho Flow handles internal alerts and exception escalation</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Estimated Monthly Costs for New Services</h3>
+        <p>The tools below are the only new costs this proposal introduces. Everything else (Zoho Books, Zoho Flow, Zoho Creator, Zoho Analytics) is already included in Global Promo's Zoho One subscription at no additional charge.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Service</th>
+                    <th>Plan</th>
+                    <th>Estimated Cost</th>
+                    <th>Why This Plan</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>AfterShip</td>
+                    <td>Essentials (up to 1,200 shipments/month)</td>
+                    <td>~$11/month</td>
+                    <td>Recommended — more than sufficient for 120–150 shipments/month</td>
+                </tr>
+                <tr>
+                    <td>AfterShip</td>
+                    <td>Pro (up to 2,000 shipments/month + advanced notifications)</td>
+                    <td>~$119/month</td>
+                    <td>Only needed if volume grows significantly or advanced features are required</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Subscription Status</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Tool</th>
+                    <th>Status</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Zoho Books</strong></td>
+                    <td><span class="risk-low">Already in use</span></td>
+                    <td>No new subscription required. Global Promo's existing system of record.</td>
+                </tr>
+                <tr>
+                    <td><strong>Zoho CRM</strong></td>
+                    <td><span class="risk-low">Already in use</span></td>
+                    <td>Used daily by the sales team. Potential future integration point for linking distributor records to shipment tracking.</td>
+                </tr>
+                <tr>
+                    <td><strong>ShippingEasy</strong></td>
+                    <td><span class="risk-low">Already in use</span></td>
+                    <td>Used for U.S. order label creation. Supports API integration with Zoho Books — key enabler for automating U.S. tracking number capture.</td>
+                </tr>
+                <tr>
+                    <td><strong>Zoho Flow</strong></td>
+                    <td><span class="risk-low">Included in Zoho One</span></td>
+                    <td>No additional cost. Already available as part of Global Promo's existing Zoho One subscription. Not currently in active use.</td>
+                </tr>
+                <tr>
+                    <td><strong>Zoho Creator</strong></td>
+                    <td><span class="risk-low">Included in Zoho One</span></td>
+                    <td>No additional cost. Used to build the barcode scanning mobile form for the China team's tracking number capture.</td>
+                </tr>
+                <tr>
+                    <td><strong>AfterShip</strong></td>
+                    <td><span class="risk-med">New subscription</span></td>
+                    <td>Required for multi-carrier tracking aggregation. The only new expense. Essentials plan (~$11/month) is sufficient for 120–150 shipments/month.</td>
+                </tr>
+                <tr>
+                    <td><strong>Zoho Analytics</strong></td>
+                    <td><span class="risk-low">Included in Zoho One</span></td>
+                    <td>No additional cost. Already available. Can be used for custom reporting beyond AfterShip's built-in dashboard.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p><em>Since Global Promo already subscribes to Zoho One, Zoho Flow, Zoho Creator, and Zoho Analytics are included at no additional cost. The only new expense is AfterShip, starting at ~$11/month.</em></p>
+
+        <h3>Centralized Dashboard: Where to See All Shipments</h3>
+        <p>A key requirement is a centralized dashboard with real-time shipment status — replacing the current process of checking carrier websites individually and referencing Excel. The proposed system provides two layers of visibility:</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Dashboard</th>
+                    <th>Platform</th>
+                    <th>Purpose</th>
+                    <th>Who Uses It</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Real-time shipment tracking</strong></td>
+                    <td>AfterShip Dashboard</td>
+                    <td>The primary day-to-day view. Shows all active shipments in one place with real-time status from all carriers (UPS, FedEx, DHL). Can be filtered by status (in transit, delivered, exception), carrier, and origin country. Updates automatically as AfterShip receives carrier data.</td>
+                    <td>CSR team, operations</td>
+                </tr>
+                <tr>
+                    <td><strong>Reporting & trends</strong></td>
+                    <td>Zoho Analytics (included in Zoho One)</td>
+                    <td>Supplemental reporting layer for management. Tracks trends over time: average delivery times by carrier, exception rates, shipment volume by month, U.S. vs. China performance comparisons.</td>
+                    <td>Management</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>The AfterShip Dashboard is the single, centralized location where anyone on the team can see the status of every active shipment — no more checking individual carrier websites or referencing a spreadsheet.</p>
+
+        <div style="text-align: center; margin: 20px 0;">
+            <img src="Zillie/ptp-unlock-tracking-quota_v2.png" alt="AfterShip Tracking Dashboard — shows all shipments in one view with tracking numbers, carriers, service types, and color-coded statuses" style="max-width: 100%; border: 1px solid #ddd; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            <p style="font-size: 12px; color: #777; margin-top: 8px; font-style: italic;">AfterShip Tracking Dashboard: all shipments, carriers, and statuses in a single view. Source: aftership.com</p>
+        </div>
+    </section>
+
+    <!-- ===== 5. DATA FLOW ===== -->
+    <section id="data-flow">
+        <h2 class="section-title"><span class="section-num">5.</span> Data Flow Explanation</h2>
+
+        <h3>End-to-End Data Flow</h3>
+        <div class="diagram-container">
+            <div class="diagram-title">How Information Moves Through the System</div>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 0;">
+                <div class="flow-box" style="width: 380px; margin: 0;">
+                    <span class="box-label">Step 1</span>
+                    <strong>Order Created</strong><br>Sales creates order in Zoho Books with distributor info
+                </div>
+                <div style="font-size: 22px; color: #555; line-height: 1.2;">&#8595;</div>
+                <div class="flow-box" style="width: 380px; margin: 0;">
+                    <span class="box-label">Step 2</span>
+                    <strong>Shipment Dispatched</strong><br>Warehouse ships order; tracking # enters Zoho Books
+                </div>
+                <div style="font-size: 22px; color: #555; line-height: 1.2;">&#8595;</div>
+                <div class="flow-box" style="width: 380px; margin: 0;">
+                    <span class="box-label">Step 3</span>
+                    <strong>Tracking Synced</strong><br>Zoho Flow detects new tracking # via <span class="tip">webhook<span class="tip-text">An automatic notification sent from one system to another when something happens. Zoho Books tells Zoho Flow the moment a tracking number is added — no delay.</span></span> or <span class="tip">polling<span class="tip-text">A method where Zoho Flow checks Zoho Books at regular intervals (e.g., every 15 minutes) to see if any new tracking numbers have been added. Less immediate than a webhook, but used as a fallback.</span></span>
+                </div>
+                <div style="font-size: 22px; color: #555; line-height: 1.2;">&#8595;</div>
+                <div class="flow-box" style="width: 380px; margin: 0;">
+                    <span class="box-label">Step 4</span>
+                    <strong>Tracking Registered</strong><br>Zoho Flow sends tracking # + carrier code to AfterShip
+                </div>
+                <div style="font-size: 22px; color: #555; line-height: 1.2;">&#8595;</div>
+                <div class="flow-box" style="width: 380px; margin: 0;">
+                    <span class="box-label">Step 5</span>
+                    <strong>Status Monitored</strong><br>AfterShip detects status change and sends update back
+                </div>
+                <div style="font-size: 22px; color: #555; line-height: 1.2;">&#8595;</div>
+                <div class="flow-box" style="width: 380px; margin: 0;">
+                    <span class="box-label">Step 6</span>
+                    <strong>Distributor Notified</strong><br>Automated email sent to distributor with shipment update
+                </div>
+            </div>
+        </div>
+
+        <h3>Detailed Data Movement</h3>
+
+        <p><strong>Step 1 — Order Creation (Sales):</strong> The sales team creates a Sales Order or Invoice in Zoho Books. Distributor contact info (name, email) is captured on the order. Order status is set to <em>Confirmed</em>. Note: at this stage, no tracking number exists yet — the order has not shipped.</p>
+
+        <p><strong>Step 2 — Shipment Dispatch (Warehouse):</strong> This is a separate step performed by warehouse staff, not sales. The <strong>carrier</strong> generates the tracking number — Zoho Books does not. How the tracking number reaches Zoho Books depends on the shipment origin:</p>
+        <ul>
+            <li><strong>U.S. shipments:</strong> Labels are created in ShippingEasy (or directly on UPS/FedEx websites). ShippingEasy can be integrated with Zoho Books via Zoho Flow, so tracking numbers flow back automatically. No manual entry required.</li>
+            <li><strong>China shipments:</strong> The freight forwarder creates labels and provides the physical shipping labels with tracking numbers. Rather than typing these numbers manually, the China team scans the barcode on each label using a Zoho Creator mobile form (included in Zoho One). The tracking number is captured directly into the Zoho Books order record — no manual typing required, and no changes needed from the freight forwarder. Once the number is in Zoho Books, the rest of the automation chain (monitoring, notifications, dashboard) works identically to U.S. shipments.</li>
+        </ul>
+        <p>Getting the tracking number into Zoho Books accurately is the most important step in the entire process. If this step fails — a wrong number, a missed entry — none of the downstream automation works. That is why this proposal recommends eliminating manual entry wherever possible (see Tracking Number Entry Automation below).</p>
+
+        <div class="diagram-container">
+            <div class="diagram-title">Key Recommendation: Tracking Number Entry Automation</div>
+            <div style="max-width: 800px; margin: 0 auto;">
+                <p style="font-size: 14px; margin-bottom: 16px;"><strong>The objective is to minimize — or better yet, eliminate — manual tracking number entry.</strong> Manual data entry is inherently error-prone: transposed digits, incorrect carrier assignments, and missed entries create downstream failures that undermine the entire tracking system. A single wrong digit means the distributor receives no updates, the dashboard shows incorrect status, and a CSR has to manually investigate and correct the error.</p>
+
+                <p style="font-size: 14px; margin-bottom: 16px;">Since tracking numbers are generated by the carrier at label creation, the question is whether Global Promo's warehouses can capture them automatically:</p>
+
+                <table style="margin-bottom: 16px;">
+                    <thead>
+                        <tr>
+                            <th>Origin</th>
+                            <th>Current Label Creation</th>
+                            <th>Automatable?</th>
+                            <th>Recommended Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>U.S. — via ShippingEasy</strong></td>
+                            <td>Labels created in ShippingEasy (UPS, FedEx)</td>
+                            <td><span class="risk-low">Yes — fully automatable</span></td>
+                            <td>ShippingEasy supports API integration. Connect it to Zoho Books via Zoho Flow so tracking numbers are written to the order record automatically at label creation. Zero manual entry.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>U.S. — via carrier website</strong></td>
+                            <td>Labels created directly on UPS or FedEx websites</td>
+                            <td><span class="risk-med">Not automatable as-is</span></td>
+                            <td>Creating labels on carrier websites has no connection to Zoho Books, so tracking numbers must be entered manually. The fix: stop using carrier websites for label creation and route all U.S. shipments through ShippingEasy, which can sync automatically.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>China — via freight forwarder (barcode scan)</strong></td>
+                            <td>Freight forwarder creates labels with tracking numbers; China team currently has to type them into the system manually</td>
+                            <td><span class="risk-low">Automatable via barcode scanning</span></td>
+                            <td>Every shipping label contains a barcode that encodes the tracking number. Rather than typing the number manually, the China team can scan the barcode on the freight forwarder's label using a smartphone or handheld scanner. A Zoho Creator form (included in Zoho One) with a barcode scan field can capture the tracking number and write it directly to the Zoho Books order record — eliminating manual typing and the data entry errors that come with it. This requires no changes from the freight forwarder.</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p style="font-size: 14px;"><strong>Recommendation:</strong> U.S. shipments can be automated immediately by integrating ShippingEasy with Zoho Books via Zoho Flow. For China shipments, barcode scanning of the freight forwarder's shipping labels eliminates manual tracking number entry without requiring the freight forwarder to change their process. A simple Zoho Creator mobile form with a barcode scan field gives the China team a fast, error-free way to capture tracking numbers into Zoho Books.</p>
+            </div>
+        </div>
+
+        <div class="diagram-container">
+            <div class="diagram-title">How Both Paths Converge</div>
+            <div style="max-width: 800px; margin: 0 auto;">
+                <p style="font-size: 14px; margin-bottom: 16px;">Regardless of whether a shipment originates in the U.S. or China, both paths converge at <strong>Zoho Books</strong>. From that point forward, AfterShip handles all tracking identically:</p>
+                <p style="font-size: 14px; font-weight: bold; margin-bottom: 4px;">U.S. shipments:</p>
+                <div class="flow" style="margin-bottom: 16px;">
+                    <div class="flow-box">ShippingEasy</div>
+                    <div class="flow-arrow">&#8594;</div>
+                    <div class="flow-box highlight">Zoho Books</div>
+                </div>
+
+                <p style="font-size: 14px; font-weight: bold; margin-bottom: 4px;">China shipments:</p>
+                <div class="flow" style="margin-bottom: 16px;">
+                    <div class="flow-box">Barcode Scan (Zoho Creator)</div>
+                    <div class="flow-arrow">&#8594;</div>
+                    <div class="flow-box highlight">Zoho Books</div>
+                </div>
+
+                <p style="font-size: 14px; font-weight: bold; margin-bottom: 4px;">From Zoho Books, both follow the same path:</p>
+                <div class="flow" style="margin-bottom: 16px;">
+                    <div class="flow-box highlight">Zoho Books</div>
+                    <div class="flow-arrow">&#8594;</div>
+                    <div class="flow-box">Zoho Flow</div>
+                    <div class="flow-arrow">&#8594;</div>
+                    <div class="flow-box">AfterShip</div>
+                    <div class="flow-arrow">&#8594;</div>
+                    <div class="flow-box">Distributor Notifications</div>
+                </div>
+                <p style="font-size: 14px;">AfterShip does not know or care how the tracking number arrived in Zoho Books. It simply receives a tracking number, identifies the carrier (UPS, FedEx, DHL, etc.), and begins polling for status updates. The monitoring, dashboard updates, and automated distributor notifications work exactly the same way for a package shipped from a U.S. warehouse via ShippingEasy as they do for a package shipped from China via a freight forwarder. This is the advantage of using Zoho Books as the single convergence point — everything downstream is unified.</p>
+            </div>
+        </div>
+
+        <p><strong>Step 3 — Tracking Number Detection:</strong> Zoho Flow monitors Zoho Books for updated tracking fields using either:</p>
+        <ul>
+            <li><strong>Webhook trigger:</strong> Zoho Books fires a webhook when a package is marked as shipped (preferred)</li>
+            <li><strong>Scheduled polling:</strong> Zoho Flow checks every 15 minutes for new tracking numbers (fallback)</li>
+        </ul>
+        <p>Zoho Flow extracts: tracking number, carrier name, distributor email, and order ID.</p>
+
+        <p><strong>Step 4 — Tracking Registration:</strong> Zoho Flow sends the tracking number, carrier name, distributor email, and order details to AfterShip. AfterShip begins checking the carrier for status updates automatically.</p>
+
+        <p><strong>Step 5 — Status Monitoring:</strong> AfterShip checks carrier systems at regular intervals (typically every 3–6 hours; more frequently near delivery). When a status change is detected, AfterShip fires a webhook to Zoho Flow. Status events are normalized into standard categories: <em>In Transit, Out for Delivery, Delivered, Exception, Expired</em>.</p>
+
+        <p><strong>Step 6 — Distributor Notification:</strong> Based on the status event, the appropriate email is triggered (see Automation Logic below). Emails are sent via AfterShip's built-in notification system or via Zoho Flow + Zoho Books email templates.</p>
+    </section>
+
+    <!-- ===== 6. AUTOMATION LOGIC ===== -->
+    <section id="automation">
+        <h2 class="section-title"><span class="section-num">6.</span> Automation Logic</h2>
+
+        <h3>Trigger Matrix</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Trigger Event</th>
+                    <th>Condition</th>
+                    <th>Action</th>
+                    <th>Recipient</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>New tracking number added in Zoho Books</td>
+                    <td>Tracking field changes from empty to populated</td>
+                    <td>1. Register tracking in AfterShip<br>2. Send "Shipment Created" email</td>
+                    <td>Distributor</td>
+                </tr>
+                <tr>
+                    <td>AfterShip status &rarr; <em>In Transit</em></td>
+                    <td>First carrier scan detected</td>
+                    <td>Send "Your order is on its way" email</td>
+                    <td>Distributor</td>
+                </tr>
+                <tr>
+                    <td>AfterShip status &rarr; <em>Exception</em></td>
+                    <td>Carrier reports delay, failed attempt, or customs hold</td>
+                    <td>1. Send "Shipment Delay" email to distributor<br>2. Send internal alert to CSR team</td>
+                    <td>Distributor + CSR</td>
+                </tr>
+                <tr>
+                    <td>AfterShip status &rarr; <em>Out for Delivery</em></td>
+                    <td>Carrier reports out for delivery</td>
+                    <td>Send "Out for Delivery" email</td>
+                    <td>Distributor</td>
+                </tr>
+                <tr>
+                    <td>AfterShip status &rarr; <em>Delivered</em></td>
+                    <td>Carrier confirms delivery</td>
+                    <td>1. Send "Delivered" email<br>2. Update Zoho Books order status to <em>Fulfilled</em></td>
+                    <td>Distributor</td>
+                </tr>
+                <tr>
+                    <td>AfterShip status &rarr; <em>Expired</em></td>
+                    <td>No update for 30+ days</td>
+                    <td>Send internal alert to CSR for manual follow-up</td>
+                    <td>CSR team</td>
+                </tr>
+                <tr>
+                    <td>Tracking number invalid</td>
+                    <td>AfterShip cannot detect carrier or tracking fails validation</td>
+                    <td>Send internal alert to CSR for correction</td>
+                    <td>CSR team</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Edge Cases & Handling</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Edge Case</th>
+                    <th>How It's Handled</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Multiple packages per order</strong></td>
+                    <td>Zoho Books supports multiple tracking numbers per shipment. Each tracking number is registered separately in AfterShip. Distributor receives a notification per package.</td>
+                </tr>
+                <tr>
+                    <td><strong>China shipments with carrier handoff</strong> (e.g., China Post/EMS &rarr; USPS)</td>
+                    <td>AfterShip handles multi-leg tracking natively. The system tracks through carrier handoffs without manual intervention.</td>
+                </tr>
+                <tr>
+                    <td><strong>Incorrect tracking number entered</strong></td>
+                    <td>AfterShip returns an error via webhook. Zoho Flow sends an internal alert to the CSR team to correct the entry.</td>
+                </tr>
+                <tr>
+                    <td><strong>Distributor has multiple orders shipping simultaneously</strong></td>
+                    <td>Each order's tracking is registered independently. Emails reference the specific order number for clarity.</td>
+                </tr>
+                <tr>
+                    <td><strong>Carrier API downtime</strong></td>
+                    <td>AfterShip retries automatically. If status is unavailable for &gt;24 hours, an internal alert is triggered.</td>
+                </tr>
+                <tr>
+                    <td><strong>Order cancelled after shipment</strong></td>
+                    <td>CSR manually marks the AfterShip tracking as inactive. Zoho Flow stops further notifications for that tracking number.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Email Template Requirements</h3>
+        <p>Each automated email should include:</p>
+        <ul>
+            <li>Distributor name</li>
+            <li>Order/invoice number</li>
+            <li>Tracking number (linked to carrier tracking page or AfterShip branded tracking page)</li>
+            <li>Expected delivery date (if available from carrier)</li>
+            <li>Global Promo support contact information</li>
+            <li>Company branding (Global Promo logo, colors)</li>
+        </ul>
+    </section>
+
+    <!-- ===== 7. IMPLEMENTATION PHASES ===== -->
+    <section id="phases">
+        <h2 class="section-title"><span class="section-num">7.</span> Implementation Phases</h2>
+
+        <p>Each phase below identifies <strong>what</strong> needs to happen and <strong>who</strong> is responsible. The Marketing & System Specialist defines requirements, oversees quality, and validates outcomes. Technical configuration is carried out by a Zoho-certified consultant or IT resource, with the India-based team assisting on execution tasks as directed.</p>
+
+        <div class="phase-card">
+            <h3>Phase 1: Foundation (Week 1–2)</h3>
+            <div class="phase-objective">Objective: Replace Excel with Zoho Books as the single source of truth for tracking data — and minimize or eliminate manual data entry wherever possible.</div>
+            <ul class="checklist">
+                <li><strong>Specialist:</strong> Review current Zoho Books setup and identify any missing fields (e.g., tracking number, carrier name)</li>
+                <li><strong>Consultant/IT:</strong> Integrate ShippingEasy with Zoho Books via Zoho Flow to automate U.S. tracking number capture</li>
+                <li><strong>Consultant/IT:</strong> Add or configure tracking number and carrier fields in Zoho Books</li>
+                <li><strong>Consultant/IT:</strong> Build a Zoho Creator mobile form with barcode scanning for the China team to capture freight forwarder tracking numbers into Zoho Books</li>
+                <li><strong>Specialist:</strong> Train the China team on the barcode scanning workflow and provide a step-by-step guide</li>
+                <li><strong>Specialist:</strong> Retire the Excel tracking sheet</li>
+                <li><strong>Consultant/IT:</strong> Set up AfterShip account and configure carrier list (U.S. + China carriers)</li>
+            </ul>
+            <div class="phase-outcome"><strong>Outcome:</strong> All tracking numbers flow through Zoho Books. No more Excel. U.S. tracking is automated via ShippingEasy integration. China tracking is automated via barcode scanning of freight forwarder labels.</div>
+        </div>
+
+        <div class="phase-card">
+            <h3>Phase 2: Automation & Tracking (Week 3–4)</h3>
+            <div class="phase-objective">Objective: Connect Zoho Books to AfterShip via Zoho Flow.</div>
+            <ul class="checklist">
+                <li><strong>Consultant/IT:</strong> Create a Zoho Flow workflow that automatically sends new tracking numbers from Zoho Books to AfterShip</li>
+                <li><strong>Consultant/IT:</strong> Configure AfterShip webhook endpoint to send status updates back to Zoho Flow</li>
+                <li><strong>Specialist:</strong> Test with live shipments (start with a small batch of U.S. shipments)</li>
+                <li><strong>Specialist:</strong> Validate carrier auto-detection for UPS, FedEx, and DHL. Test freight forwarder tracking numbers to confirm AfterShip compatibility.</li>
+                <li><strong>Specialist:</strong> Identify and document edge cases: invalid tracking numbers, multi-package orders</li>
+            </ul>
+            <div class="phase-outcome"><strong>Outcome:</strong> Tracking numbers are automatically synced and monitored. Status updates flow in real time.</div>
+        </div>
+
+        <div class="phase-card">
+            <h3>Phase 3: Notifications (Week 5–6)</h3>
+            <div class="phase-objective">Objective: Automate distributor-facing and internal email notifications.</div>
+            <ul class="checklist">
+                <li><strong>Specialist:</strong> Define email template content and tone for each milestone (Shipment Created, In Transit, Exception, Delivered)</li>
+                <li><strong>India team:</strong> Build and format email templates based on Specialist's direction</li>
+                <li><strong>Consultant/IT:</strong> Configure AfterShip notification rules or build Zoho Flow email triggers</li>
+                <li><strong>Consultant/IT:</strong> Set up internal alert channel for exceptions (email to CSR team or Zoho Cliq)</li>
+                <li><strong>Specialist:</strong> Test full notification flow end-to-end and collect feedback from CSR team</li>
+            </ul>
+            <div class="phase-outcome"><strong>Outcome:</strong> Distributors receive automated updates. CSRs are alerted only for exceptions.</div>
+        </div>
+
+        <div class="phase-card">
+            <h3>Phase 4: Dashboard & Reporting (Week 7–8)</h3>
+            <div class="phase-objective">Objective: Provide centralized visibility into all active shipments.</div>
+            <ul class="checklist">
+                <li><strong>Specialist:</strong> Define dashboard requirements — what views, filters, and metrics are needed</li>
+                <li><strong>Consultant/IT:</strong> Configure AfterShip dashboard views (by status, by carrier, by origin country)</li>
+                <li><strong>Consultant/IT:</strong> Grant dashboard access to relevant team members (CSR, operations, management)</li>
+                <li><strong>Consultant/IT:</strong> (Optional) Build supplemental Zoho Analytics reports for trends</li>
+                <li><strong>Specialist:</strong> Validate dashboard accuracy and create a daily/weekly summary report for management</li>
+            </ul>
+            <div class="phase-outcome"><strong>Outcome:</strong> One-stop dashboard for all shipment status. Management has reporting visibility.</div>
+        </div>
+
+        <div class="phase-card">
+            <h3>Phase 5: Optimization (Week 9–10)</h3>
+            <div class="phase-objective">Objective: Refine, measure, and demonstrate ROI.</div>
+            <ul class="checklist">
+                <li><strong>Specialist:</strong> Check in with CSR team to confirm the automation is reducing their manual workload as expected</li>
+                <li><strong>Specialist:</strong> Gather CSR feedback and define adjustments to automation rules</li>
+                <li><strong>Consultant/IT:</strong> Tune polling frequency, notification timing, and workflow rules</li>
+                <li><strong>Specialist:</strong> Document the system for onboarding new team members</li>
+                <li><strong>Specialist:</strong> Review what's working and gather feedback from CSRs and distributors on any gaps or improvements</li>
+            </ul>
+            <div class="phase-outcome"><strong>Outcome:</strong> System is stable, measured, and documented.</div>
+        </div>
+    </section>
+
+    <!-- ===== 8. ESTIMATED TIMELINE ===== -->
+    <section id="timeline">
+        <h2 class="section-title"><span class="section-num">8.</span> Estimated Timeline</h2>
+
+        <div class="timeline-bar">
+            <div class="tl-segment">Phase 1<span class="tl-weeks">Wk 1–2</span></div>
+            <div class="tl-segment">Phase 2<span class="tl-weeks">Wk 3–4</span></div>
+            <div class="tl-segment">Phase 3<span class="tl-weeks">Wk 5–6</span></div>
+            <div class="tl-segment">Phase 4<span class="tl-weeks">Wk 7–8</span></div>
+            <div class="tl-segment">Phase 5<span class="tl-weeks">Wk 9–10</span></div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Phase</th>
+                    <th>Duration</th>
+                    <th>Effort Level</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Phase 1: Foundation</td>
+                    <td>2 weeks</td>
+                    <td>Low — configuration and training</td>
+                </tr>
+                <tr>
+                    <td>Phase 2: Automation & Tracking</td>
+                    <td>2 weeks</td>
+                    <td>Medium — integration work and testing</td>
+                </tr>
+                <tr>
+                    <td>Phase 3: Notifications</td>
+                    <td>2 weeks</td>
+                    <td>Medium — template design and testing</td>
+                </tr>
+                <tr>
+                    <td>Phase 4: Dashboard & Reporting</td>
+                    <td>2 weeks</td>
+                    <td>Low — configuration and access setup</td>
+                </tr>
+                <tr>
+                    <td>Phase 5: Optimization</td>
+                    <td>2 weeks</td>
+                    <td>Low — monitoring and refinement</td>
+                </tr>
+                <tr>
+                    <td><strong>Total</strong></td>
+                    <td><strong>~10 weeks</strong></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+        <p><em>Note: These durations assume a Zoho consultant or IT resource is engaged and available on a regular basis. Since Global Promo does not currently have a dedicated IT person, the actual pace will depend on consultant availability and scheduling. Phases can overlap, and Phase 1 can begin immediately with no dependencies.</em></p>
+    </section>
+
+    <!-- ===== 9. RISKS, LIMITATIONS & ASSUMPTIONS ===== -->
+    <section id="risks">
+        <h2 class="section-title"><span class="section-num">9.</span> Risks, Limitations & Assumptions</h2>
+
+        <h3>Confirmed Details</h3>
+        <ul>
+            <li>Global Promo subscribes to Zoho One (Zoho Books, Zoho CRM, Zoho Learn actively used; Zoho Flow and Zoho Analytics available)</li>
+            <li>U.S. shipments are processed either through ShippingEasy or directly via UPS/FedEx websites, depending on the order</li>
+            <li>China shipments are handled by a freight forwarder who creates the shipping labels; the China team currently enters the tracking numbers into the system manually</li>
+            <li>Primary carriers: UPS, FedEx, DHL</li>
+            <li>Shipment volume: approximately 120–150 per month</li>
+            <li>China team does not currently use Zoho apps; management is open to onboarding them</li>
+            <li>India-based team assists with email campaigns but has limited Zoho experience</li>
+        </ul>
+
+        <h3>Remaining Assumptions</h3>
+        <ul>
+            <li>Distributor email addresses are stored in Zoho Books on the relevant order/invoice</li>
+            <li>Global Promo's ShippingEasy plan includes API access (needs to be confirmed; some plans do not)</li>
+            <li>The China freight forwarder provides tracking numbers for all shipments (not just some)</li>
+        </ul>
+
+        <h3>Risks</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Risk</th>
+                    <th>Impact</th>
+                    <th>Likelihood</th>
+                    <th>Mitigation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>China team currently does not use Zoho apps and relies on manual processes</td>
+                    <td>High — breaks the data flow at the source</td>
+                    <td><span class="risk-med">Medium</span></td>
+                    <td>Management is open to bringing the China team onto Zoho. The barcode scanning workflow (via Zoho Creator mobile form) is simple and requires minimal training — scan the label, select the order, submit. This is a low-barrier entry point for onboarding the China team.</td>
+                </tr>
+                <tr>
+                    <td>China freight forwarder tracking numbers may use varying formats (DHL, or forwarder-specific carriers)</td>
+                    <td>Low — UPS, FedEx, and DHL are fully supported by AfterShip, but freight forwarder tracking numbers may use less common formats</td>
+                    <td><span class="risk-med">Medium</span></td>
+                    <td>Test freight forwarder tracking numbers early in Phase 2 to confirm AfterShip recognizes them correctly</td>
+                </tr>
+                <tr>
+                    <td>Zoho Books API rate limits</td>
+                    <td>Medium — could delay sync during high-volume periods</td>
+                    <td><span class="risk-low">Low</span></td>
+                    <td>Implement queuing in Zoho Flow; batch API calls during peak</td>
+                </tr>
+                <tr>
+                    <td>AfterShip service outage</td>
+                    <td>Medium — tracking updates paused temporarily</td>
+                    <td><span class="risk-low">Low</span></td>
+                    <td>AfterShip guarantees 99.9% uptime (very rare outages). If it is temporarily unavailable, Zoho Flow will automatically retry until it connects.</td>
+                </tr>
+                <tr>
+                    <td>Email deliverability (spam filters)</td>
+                    <td>Medium — distributors miss notifications</td>
+                    <td><span class="risk-med">Medium</span></td>
+                    <td>By default, AfterShip sends notification emails from its own address (e.g., noreply@aftership.com). Distributors may not recognize this sender, and spam filters are more likely to block it. To avoid this, configure AfterShip to send from Global Promo's own address (e.g., tracking@globalpromo.com) so emails look familiar and trustworthy. Keep emails short with clear subject lines. As a backup, AfterShip also provides a branded tracking page — a webpage with Global Promo's logo where distributors can check shipment status anytime, even if they miss an email.</td>
+                </tr>
+                <tr>
+                    <td>Team resistance to new workflow</td>
+                    <td>High — if the team reverts to Excel, the entire system goes unused</td>
+                    <td><span class="risk-med">Medium</span></td>
+                    <td>Involve CSR team early in testing; demonstrate time savings; provide clear documentation</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Limitations</h3>
+        <ul>
+            <li><strong>Real-time is relative:</strong> Carrier tracking updates are not truly real-time. Carriers update their systems in batches. AfterShip polls at intervals (every 3–6 hours). "Live tracking" means near-real-time, not to-the-minute.</li>
+            <li><strong>China-to-U.S. handoff gaps:</strong> When a package transfers from a China carrier to a U.S. carrier (e.g., China Post/EMS &rarr; USPS), there can be a tracking gap of 1–5 days while the package clears customs. This is a carrier limitation, not a system limitation.</li>
+            <li><strong>No retroactive tracking:</strong> This system tracks shipments going forward. Historical shipment data in the current Excel sheet would need to be manually migrated or archived separately.</li>
+        </ul>
+    </section>
+
+    <!-- ===== 10. CONCLUSION ===== -->
+    <section id="conclusion">
+        <h2 class="section-title"><span class="section-num">10.</span> Conclusion</h2>
+        <div class="conclusion-box">
+            <p>The proposed system replaces Global Promo's manual, Excel-based tracking process with an automated pipeline built on tools the team already uses (Zoho Books) and a purpose-built tracking platform (AfterShip). The key outcomes are:</p>
+            <ul>
+                <li><strong>Single source of truth:</strong> Zoho Books replaces Excel for tracking data</li>
+                <li><strong>Automated monitoring:</strong> AfterShip tracks 1,200+ carriers, eliminating manual carrier website checks</li>
+                <li><strong>Proactive communication:</strong> Distributors receive automated emails at every shipment milestone</li>
+                <li><strong>Centralized visibility:</strong> The AfterShip dashboard gives CSRs, operations, and management real-time shipment status in one place</li>
+                <li><strong>Measurable impact:</strong> 80% reduction in manual tracking work across both U.S. and China shipments — U.S. via ShippingEasy integration, China via barcode scanning of freight forwarder labels</li>
+            </ul>
+            <p class="closing">The phased rollout minimizes disruption, allows for testing and feedback at each stage, and can be executed within 8–10 weeks.</p>
+        </div>
+    </section>
+
+    <!-- ===== GLOSSARY ===== -->
+    <section id="glossary">
+        <h2 class="section-title"><span class="section-num">11.</span> Glossary of Key Terms</h2>
+
+        <div class="glossary-grid">
+            <div class="glossary-item">
+                <div class="glossary-term">API</div>
+                <div class="glossary-def"><strong>Application Programming Interface.</strong> A set of rules that allows two software systems to communicate with each other. In this proposal, APIs allow Zoho Books, Zoho Flow, and AfterShip to exchange data automatically without human intervention.</div>
+            </div>
+            <div class="glossary-item">
+                <div class="glossary-term">Webhook</div>
+                <div class="glossary-def">An automatic notification sent from one system to another when a specific event occurs. For example, when a tracking status changes in AfterShip, it instantly sends the update to Zoho Flow — rather than Zoho Flow having to repeatedly check for changes.</div>
+            </div>
+            <div class="glossary-item">
+                <div class="glossary-term">Polling</div>
+                <div class="glossary-def">A method where one system checks another at regular intervals (e.g., every 15 minutes) to see if anything has changed. Less efficient than webhooks, but used as a fallback when webhooks are not available.</div>
+            </div>
+            <div class="glossary-item">
+                <div class="glossary-term">Zoho Books</div>
+                <div class="glossary-def">An online accounting and invoicing platform used by Global Promo to manage orders, invoices, payments, and shipment details. It serves as the system of record — the single source of truth for order and tracking data.</div>
+            </div>
+            <div class="glossary-item">
+                <div class="glossary-term">Zoho Flow</div>
+                <div class="glossary-def">A no-code automation tool within the Zoho ecosystem. It connects different applications and automates workflows — for example, detecting a new tracking number in Zoho Books and automatically registering it in AfterShip.</div>
+            </div>
+            <div class="glossary-item">
+                <div class="glossary-term">AfterShip</div>
+                <div class="glossary-def">A third-party tracking aggregation platform that monitors shipments across 1,200+ carriers worldwide. Instead of checking each carrier's website individually, AfterShip provides a single interface for all tracking data and can send automated notifications on status changes.</div>
+            </div>
+            <div class="glossary-item">
+                <div class="glossary-term">Tracking Aggregator</div>
+                <div class="glossary-def">A service that consolidates tracking information from multiple shipping carriers into one place. This eliminates the need to check USPS, FedEx, China Post/EMS, and other carrier websites separately.</div>
+            </div>
+            <div class="glossary-item">
+                <div class="glossary-term">Carrier Handoff</div>
+                <div class="glossary-def">When a package transfers from one shipping carrier to another during transit. Common with China-origin shipments — for example, a package may start with China Post/EMS and transfer to USPS once it arrives in the U.S. There is often a brief tracking gap during this transition.</div>
+            </div>
+            <div class="glossary-item">
+                <div class="glossary-term">Freight Forwarder</div>
+                <div class="glossary-def">A company that arranges shipment of goods on behalf of another business. They do not own ships or planes — they coordinate cargo booking, customs paperwork, and carrier handoffs. Global Promo's China-based freight forwarder handles export logistics and provides tracking numbers for China-origin shipments.</div>
+            </div>
+            <div class="glossary-item">
+                <div class="glossary-term">CSR</div>
+                <div class="glossary-def"><strong>Customer Service Representative.</strong> The team members who currently handle manual tracking lookups and distributor communication. This system reduces their manual workload so they can focus on exception handling and distributor relationships.</div>
+            </div>
+            <div class="glossary-item">
+                <div class="glossary-term">SLA</div>
+                <div class="glossary-def"><strong>Service Level Agreement.</strong> A commitment from a service provider guaranteeing a certain level of uptime or performance. AfterShip offers a 99.9% uptime SLA, meaning their service is expected to be available virtually all the time.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="report-footer">
+        Prepared for Global Promo — Los Angeles, CA
+    </footer>
+
+    </div><!-- end .report-content -->
+
+    <script>
+        // Allow Enter key to submit password
+        document.getElementById('passwordInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') checkPassword();
+        });
+
+        function checkPassword() {
+            var input = document.getElementById('passwordInput').value;
+            if (input === 'GlobalPromo2026') {
+                document.getElementById('passwordOverlay').style.display = 'none';
+                document.getElementById('reportContent').style.display = 'block';
+            } else {
+                document.getElementById('errorMsg').style.display = 'block';
+                document.getElementById('passwordInput').value = '';
+                document.getElementById('passwordInput').focus();
+            }
+        }
+    </script>
+
+</body>
+</html>
